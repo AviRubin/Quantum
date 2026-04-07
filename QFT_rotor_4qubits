@@ -1,4 +1,4 @@
-# --- The challenge is to pick a secret rotation for one qubit, then use the other 3 qubits to "detect" it with the QFT ---
+# --- The challenge is to pick a secret rotation for one qubit, then use the other 3 qubits to "detect" it with QFT ---
 
 import numpy as np
 import random
