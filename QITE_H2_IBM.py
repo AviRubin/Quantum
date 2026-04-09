@@ -10,22 +10,22 @@ from qiskit_algorithms.time_evolvers.variational import ImaginaryMcLachlanPrinci
 from qiskit_nature.second_q.drivers import PySCFDriver
 from qiskit_nature.second_q.mappers import ParityMapper
 
-# IBM auth and backend setup
+# IBM Auth and Backend Setup
 service = QiskitRuntimeService(channel="ibm_quantum_platform")
 backend = service.least_busy(operational=True, simulator=False)
 print(f"Targeting Backend: {backend.name} ({backend.num_qubits} qubits)")
 
-# molecule definition (logical 2-qubit space)
+# Molecule Definition (logical 2-qubit space)
 driver = PySCFDriver(atom="H 0 0 0; H 0 0 0.735", basis="sto3g")
 problem = driver.run()
 mapper = ParityMapper(num_particles=problem.num_particles)
 h2_hamiltonian = mapper.map(problem.hamiltonian.second_q_op())
 
-# ansatz (logical 2-qubit space)
+# Ansatz (logical 2-qubit space)
 ansatz = efficient_su2(num_qubits=h2_hamiltonian.num_qubits, reps=1) # for increased accuracy (but more noise) change reps to 2 or 3
 init_params = np.full(ansatz.num_parameters, 0.01) 
 
-# runtime setup
+# Runtime Setup
 estimator = Estimator(mode=backend)
 estimator.options.resilience_level = 1 # for increased accuracy adjust to 2 for zero noise extrapolation
 estimator.options.default_shots = 1024 # for increased accuracy adjust higher to 4096 or 10000
@@ -59,13 +59,12 @@ def transpiled_run(pubs, **kwargs):
             
     return original_run(t_pubs, **kwargs)
 
-# Patch the estimator to use above interceptor
+# patch the estimator to use above interceptor
 estimator.run = transpiled_run
-
 
 var_principle = ImaginaryMcLachlanPrinciple()
 
-# 5. define evolution problem (using logical operators)
+# 5. Define Evolution Problem (using logical operators)
 total_imaginary_time = 2.0 # for increased accuracy (and time and noise) increase to 5 or 10
 num_steps = 5 # for increased accuracy (and time and noise) increase to 10 or 20
 
@@ -75,7 +74,7 @@ evolution_problem = TimeEvolutionProblem(
     aux_operators=[h2_hamiltonian]
 )
 
-# 6. execute QITE
+# 6. Execute QITE
 print(f"Starting QITE on {backend.name}. Passing logical math to the algorithm...")
 var_qite = VarQITE(
     ansatz=ansatz, # <--- We pass the pure 2-qubit logical ansatz here
@@ -88,7 +87,7 @@ var_qite = VarQITE(
 evolution_result = var_qite.evolve(evolution_problem)
 print("Evolution complete.")
 
-# 7. results and plotting
+# 7. Results and Plotting
 energies = [obs[0][0] + problem.nuclear_repulsion_energy for obs in evolution_result.observables]
 times = np.linspace(0, total_imaginary_time, len(energies))
 
