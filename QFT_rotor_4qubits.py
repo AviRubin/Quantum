@@ -7,21 +7,21 @@ from qiskit_ibm_runtime import QiskitRuntimeService, SamplerV2 as Sampler
 from qiskit_aer import AerSimulator
 from qiskit.visualization import plot_histogram
 
-# 1. AUTHENTICATION & SERVICE
+# Authetication and Service
 # Option A: local simulator
 backend = AerSimulator()
 print("Using Local AerSimulator")
 
-# Option B: IBM hardware
-# service = QiskitRuntimeService(channel="ibm_quantum")
+# Option B: IBM hardware (likely need to vet when not limited to run time)
+# service = QiskitRuntimeService(channel="ibm_quantum_platform")
 # backend = service.least_busy(operational=True, simulator=False, min_qubits=4)
 # print(f"Connecting to IBM Hardware: {backend.name}")
 
-# 2. THE CHALLENGE: Generate a Secret Rotation
+# THE CHALLENGE: Generate a Secret Rotation
 secret_angle = random.uniform(0, 2 * np.pi)
 print(f"--- SECRET PHASE GENERATED: {np.degrees(secret_angle):.2f}° ---")
 
-# 3. CIRCUIT CONSTRUCTION (3 Observation Qubits + 1 Rotor)
+# Circuit Construction (3 Observation Qubits + 1 Rotor)
 n_obs = 3
 rotor_idx = 3
 qc = QuantumCircuit(4, 3)
@@ -52,11 +52,11 @@ qc.h(2)
 # Step D: Measurement
 qc.measure([0, 1, 2], [0, 1, 2])
 
-# 4. VISUALIZE THE CIRCUIT
+# Visualize the Circuit
 print("\nCircuit Diagram:")
 print(qc.draw(output='text')) # Use output='mpl' if running in a Jupyter Notebook
 
-# 4. EXECUTION
+# Execution
 # Transpile for the chosen backend (Aer or IBM)
 optimized_qc = transpile(qc, backend=backend)
 
