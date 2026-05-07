@@ -40,9 +40,9 @@ active_terms = [
     ("IZIZ",  0.12),  # Weak polarization effect of the Sulfur d-orbital
 ]
 
-# --- Additional block uncomment when scaling to a large physical QPU ---
+# --- Uncomment this block when scaling to a large physical QPU ---
 # These terms model the complex "electron soup" of a real Sulfone molecule.
-#showcase_terms = [
+#additional_terms = [
     # ("XXII",  0.05),  # Electron hopping between polar Oxygens
     # ("YYII",  0.05),  # Spin-flip exchange term
     # ("ZIZI", -0.15),  # Charge-dipole interaction with Sulfur core
@@ -54,7 +54,7 @@ active_terms = [
 #]
 
 # Combine lists
-full_terms = active_terms # + showcase_terms
+full_terms = active_terms # + additional_terms
 sulfone_hamiltonian = SparsePauliOp.from_list(full_terms)
 
 # CONTROLLED TIME EVOLUTION
