@@ -1,4 +1,4 @@
-# Find the binding energy required for Li to strip away a theoretical SO solvent shell
+# Find the binding energy required for Li to strip away a theoretical Sulfone solvent shell
 
 import numpy as np
 from qiskit import QuantumCircuit, transpile
